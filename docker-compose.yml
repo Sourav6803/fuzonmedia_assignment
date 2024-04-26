@@ -1,0 +1,31 @@
+version: '3.9'
+services:
+    api:
+        build:
+            dockerfile: Dockerfile
+            context: .
+        depends_on:
+            - postgres
+        environment:
+            DATABASE_URL: postgres://postgres:Sourav6803@@postgres:5432/postgres
+            NODE_ENV: development
+            PORT: 5000
+        ports: 
+            - "5000:5000" 
+        networks:
+            - mynetwork 
+
+    postgres:
+        image: postgres:latest
+        ports:
+            - "5432:5432"
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: Sourav6803@
+            POSTGRES_DB: postgres
+        networks:
+            - mynetwork
+
+networks:
+    mynetwork:
+        driver: bridge
