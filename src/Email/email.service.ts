@@ -13,21 +13,12 @@ type mailOptions = {
 @Injectable()
 export class EmailService {
   constructor(private mailService: MailerService) {}
-  async sendMail({
-    subject,
-    email,
-    username,
-    activation_code,
-    template,
-  }: mailOptions) {
+  async sendMail({subject, email, username, activation_code, template,}: mailOptions) {
     await this.mailService.sendMail({
       to: email,
       subject,
       template,
-      context: {
-        username,
-        activation_code,
-      },
+      context: { username, activation_code },
     });
   }
 }

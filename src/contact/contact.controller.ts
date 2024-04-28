@@ -36,17 +36,18 @@ export class ContactController {
   }
 
   @Get('get-contact')
-  getContact( @User() user:UserEntity, @Query('page') page:number=1, @Query('limit') limit:number=3){
+  getContact( @User() user:UserEntity, @Query('page') page:number, @Query('limit') limit:number=5, ){
       return this.contsctService.getAllContact(user, page, limit)
   }
 
   
 
-  @Get(':name')
-  async getContactByName(@Param('name') name: string) {
-    const contact = await this.contsctService.getContactByName(name);
+  @Get('/search')
+  async getContactByName(@User() user:UserEntity, @Query('query') query: string, ) {
+    const contact = await this.contsctService.getContactByName(user, query);
+    
     if (!contact) {
-      throw new NotFoundException(`Contact with name ${name} not found`);
+      throw new NotFoundException(`Contact with name ${query} not found`);
     }
 
     return contact;

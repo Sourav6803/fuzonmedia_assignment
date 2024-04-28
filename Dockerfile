@@ -1,5 +1,5 @@
 FROM  node:20-alpine
-WORKDIR /fff/assignment/src
+WORKDIR /assignment/src/
 COPY ./package*.json ./
 RUN npm install
 COPY . .

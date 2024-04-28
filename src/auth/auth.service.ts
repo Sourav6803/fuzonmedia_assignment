@@ -9,39 +9,6 @@ import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { EmailService } from 'src/Email/email.service';
 import { ActivationDto } from 'src/DTO/activation.dto';
-import { BlogDto } from 'src/DTO/blog.dto';
-// import { BlogEntity } from 'src/Entity/blog.entity';
-
-// @Injectable()
-// export class AuthService {
-//     constructor(@InjectRepository(UserEntity) private repo:Repository<UserEntity>){
-
-//     }
-
-//     async registerUser(registerDto: RegisterUserDto ){
-
-//         const {username, password} = registerDto
-
-//         const hash = await bcrypt.hash(password, 12)
-//         const salt = await bcrypt.genSalt(12)
-       
-//         const user = new UserEntity();
-
-//         user.username = username;
-//         user.password = hash;
-//         user.salt = salt
-
-//         this.repo.create(user)
-       
-//         try{
-//             return await this.repo.save(user)
-
-//         }
-//         catch(err){
-//             throw new InternalServerErrorException('Something went wrong, User was not created')
-//         }
-//     }
-// }
 
 
 @Injectable()
@@ -54,9 +21,21 @@ export class AuthService {
     private readonly emailService: EmailService,
   ) {}
 
+  
+
   async registerUser(registerDTO: RegisterUserDto, responce: Response) {
     const {username, password, email, phone_number} = registerDTO;
 
+
+    const numericRegex = /^[0-9]+$/;
+
+    if (!numericRegex.test(phone_number)) {
+        throw new BadRequestException("Phone number contains only number.");
+      }
+
+    if(phone_number.length != 10){
+        throw new BadRequestException(`Mobile shold be 10 digit`)
+    }
     const option:FindOneOptions<UserEntity> = {
         where: {email: email}
     }
@@ -100,7 +79,7 @@ export class AuthService {
     });
 
 
-  return {token, responce}
+  return {messge: `we send a OTP with your registred email: ${email}. This OTP validate Only 5 min.`,token:token, }
 
   }
 
@@ -159,21 +138,10 @@ export class AuthService {
     }
 
     if (user && (await this.comparePassword(password, user.password))) {
-      // const tokenSender = new TokenSender(this.configService, this.jwtService);
-      // return tokenSender.sendToken(user);
+      
 
       const jwtPayload = {sub: user.id, email:user.email}
-      // const accessToken = this.jwtService.sign(
-      //   {
-      //     id: user.id,
-      //   },
-      //   {
-      //     secret: ('sourav')
-      //     // expiresIn: '1d',
-      //   },
-      // )
-
-      //const accessToken = await this.jwtService.signAsync(jwtPayload, {expiresIn: '1d', algorithm: 'HS512'})
+      
 
       return {token: await this.jwtService.signAsync(jwtPayload), user: user}
 

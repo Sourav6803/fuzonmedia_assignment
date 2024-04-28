@@ -17,6 +17,6 @@ export class RegisterUserDto{
 
 
     @IsNotEmpty({ message: 'Phone Number is required.' })
-    phone_number: number;
+    phone_number: string;
    
 }

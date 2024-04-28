@@ -4,10 +4,11 @@ services:
         build:
             dockerfile: Dockerfile
             context: .
+        restart: always    
         depends_on:
             - postgres
         environment:
-            DATABASE_URL: postgres://postgres:Sourav6803@@postgres:5432/postgres
+            DATABASE_URL: postgres://postgres:Sourav6803@@postgres:5432/fuzonmedia
             NODE_ENV: development
             PORT: 5000
         ports: 
@@ -17,12 +18,13 @@ services:
 
     postgres:
         image: postgres:latest
+        restart: always 
         ports:
             - "5432:5432"
         environment:
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: Sourav6803@
-            POSTGRES_DB: postgres
+            POSTGRES_DB: fuzonmedia
         networks:
             - mynetwork
 

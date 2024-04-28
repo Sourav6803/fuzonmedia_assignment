@@ -22,7 +22,8 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
           from: 'nodemailer',
         },
         template: {
-          dir: join(__dirname, '../../../assignment/src/email-templates'),
+          // dir: join(__dirname, '../../../assignment/src/email-templates'),
+          dir: './src/email-templates',
           adapter: new EjsAdapter(),
           options: {
             strict: false,
